@@ -8,33 +8,35 @@
 </head>
 <body>
     <div class="main-container">
-        <div class="form-group">
-            <span>Bem-vindo de volta</span>
-            <span>Informe suas credenciais</span>
-        </div>
-        <div class="form-group">
-            <label>Usuário ou e-mail</label>
-            <input type="text" id="credentials"/>
-        </div>
-        <div class="form-group">
-            <label>Senha</label>
-            <input type="password" id="password"/>
-        </div>
-        <div class="options">
-            <div>
-                <input type="checkbox" id="checkbox">
-                <span>Lembrar-me</span>
+        <form>
+            <div class="form-group">
+                <span>Bem-vindo de volta</span>
+                <span>Informe suas credenciais</span>
             </div>
-            <a href="../register/index.html">Esqueci minha senha</a>
-            
-        </div>
-        <div class="form-group">
-            <input type="submit" id="button" value="Entrar"/>
-        </div>
-        <span>Já tem conta? <a href="../register/index.html"><b>Entrar</b></a></span>
-
+            <span class="error-message"></span>
+            <div class="form-group">
+                <label>Usuário ou e-mail</label>
+                <input type="text" id="credentials"/>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="password"/>
+            </div>
+            <div class="options">
+                <div>
+                    <input type="checkbox" id="checkbox">
+                    <span>Lembrar-me</span>
+                </div>
+                <a href="../register/index.html">Esqueci minha senha</a>
+                
+            </div>
+            <div class="form-group">
+                <input type="submit" id="button" value="Entrar"/>
+            </div>
+            <span>Já tem conta? <a href="../register/index.html"><b>Entrar</b></a></span>
+        </form>
     </div>
     
-    <scrip src="./script.js" type="module"></scrip>
+    <script src="./script.js" type="module"></script>
 </body>
 </html>
