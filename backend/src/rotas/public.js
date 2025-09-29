@@ -17,6 +17,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
+    
     const user = req.body
 
     const result = await login(user.credential, user.password)

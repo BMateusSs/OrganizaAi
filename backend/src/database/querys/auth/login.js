@@ -2,7 +2,9 @@ import db from '../../connection.js'
 import {verifyPassword, createToken } from '../../../utils/auth.js'
 
 async function login(credential, password){
+    
     const query = 'SELECT id, password FROM users WHERE username = ? OR email = ?'
+    
     const [rows, fields] = await db.execute(query, [credential, credential])
 
     const fakeHash = "$2a$10$ABCDEFGHIJKLMNOPQRSTUVWXabcdefghijklmnopqrstuvwx12"
