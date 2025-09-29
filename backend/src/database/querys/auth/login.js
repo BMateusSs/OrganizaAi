@@ -1,15 +1,19 @@
-import bcryptjs from 'bcryptjs'
+import db from '../../connection.js'
+import {verifyPassword } from '../../../utils/auth.js'
 
-async function hashPassword(password){
-    const salt = await bcryptjs.genSalt(10);
-    const hash = await bcryptjs.hash(password, salt);
+async function login(credential, password){
+    const query = 'SELECT id, password FROM users WHERE username = ? OR email = ?'
+    const [rows, fields] = await db.execute(query, [credential, credential])
 
-    return hash
+    const fakeHash = "$2a$10$ABCDEFGHIJKLMNOPQRSTUVWXabcdefghijklmnopqrstuvwx12"
+    const user = rows.length > 0 ? rows[0] : {'id': null, 'password': fakeHash}
+
+    const result = await verifyPassword(user.password, password)
+    if (!user.id || !result){
+        return {'status': false, 'message': 'Credeenciais inválidas'}
+    }
+
+    return {'status': true, 'userId': user.id}
 }
 
-async function verifyPassword(hash, password) {
-    const result = await bcryptjs.compare(password, hash)
-    return result
-}
-
-export default { hashPassword, verifyPassword };
+export default login
