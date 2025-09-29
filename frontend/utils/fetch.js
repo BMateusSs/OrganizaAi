@@ -1,10 +1,10 @@
-async function fetch(url, config){
+async function useFetch(url, config){
     try{
         const response = await fetch(url, config)
         const data = await response.json()
 
         if (!response.ok){
-            return {data: null, error: response.message}
+            return {data: null, error: data.message}
         }
 
         return {data: data, error: null}
@@ -14,4 +14,4 @@ async function fetch(url, config){
     }
 }
 
-export default fetch
+export default useFetch

@@ -1,3 +1,4 @@
+const token = localStorage.getItem('token')
 export function methodPost(body){
     return{
         method: "POST",
@@ -5,8 +6,6 @@ export function methodPost(body){
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}` 
         },
-        body: JSON.stringify({
-            body
-        })
+        body: JSON.stringify(body)
     }
 }
