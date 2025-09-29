@@ -1,5 +1,5 @@
 import db from '../../connection.js'
-import {verifyPassword } from '../../../utils/auth.js'
+import {verifyPassword, createToken } from '../../../utils/auth.js'
 
 async function login(credential, password){
     const query = 'SELECT id, password FROM users WHERE username = ? OR email = ?'
@@ -13,7 +13,9 @@ async function login(credential, password){
         return {'status': false, 'message': 'Credeenciais inválidas'}
     }
 
-    return {'status': true, 'userId': user.id}
+    const token = createToken(user.id)
+
+    return {'status': true, 'token': token}
 }
 
 export default login
