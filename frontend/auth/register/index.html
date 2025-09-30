@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+    <div>
+        <div class="main-container">
+            <form>
+                <div class="form-group">
+                    <span class="subtitle raleway-regular">Cadastre seus dados</span>
+                    <span class="title raleway-bold">Seja bem-vindo</span>
+                </div>
+                <div class="error-container">
+                    <span class="error-message raleway-regular"></span>
+                </div>
+                <div class="form-group">
+                    <label class="raleway-regular">Nome</label>
+                    <input type="text" id="name" class="input"/>
+                </div>
+                <div class="form-group">
+                    <label class="raleway-regular">Nome de usuário</label>
+                    <input type="text" id="username" class="input"/>
+                </div>
+                <div class="form-group">
+                    <label class="raleway-regular">Email</label>
+                    <input type="email" id="email" class="input"/>
+                </div>
+                <div class="form-group">
+                    <label class="raleway-regular">Senha</label>
+                    <input type="password" id="password" class="input"/>
+                </div>
+                <div class="form-group">
+                    <label class="raleway-regular">Repitir senha</label>
+                    <input type="password" id="repeat-password" class="input"/>
+                </div>
+                <div class="form-group">
+                    <input type="submit" id="button" value="Registrar" />
+                </div>
+                <div class="form-group">
+                    <span class="raleway-regular">Já tem uma conta? <a href="../login/index.html" class="raleway-regular"><b>Entrar</b></a></span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="./script.js" type="module"></script>
+</body>
+</html>
