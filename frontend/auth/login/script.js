@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (event) => {
         event.preventDefault()
         errorMessage.textContent=''
+
+        if(!credential.value || !password.value){
+            errorMessage.textContent='Preencha todos os dados'
+            return
+        }
+
         const url = 'http://localhost:3000/login'
         const body = {
             credential: credential.value,

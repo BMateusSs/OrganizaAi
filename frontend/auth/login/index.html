@@ -4,36 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/styles.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <title>Entrar</title>
 </head>
 <body>
     <div class="main-container">
         <form>
             <div class="form-group">
-                <span>Bem-vindo de volta</span>
-                <span>Informe suas credenciais</span>
+                <span class="raleway-regular subtitle">Informe seus dados</span>
+                <span class="raleway-bold title">Bem-vindo de volta</span>
+                
             </div>
-            <span class="error-message"></span>
+
+            <div class="error-container">
+                <span class="error-message raleway-regular"></span>
+            </div>
+            
             <div class="form-group">
-                <label>Usuário ou e-mail</label>
-                <input type="text" id="credentials"/>
+                <label class="raleway-regular">Usuário ou e-mail</label>
+                <input type="text" id="credentials" class="input"/>
             </div>
             <div class="form-group">
-                <label>Senha</label>
-                <input type="password" id="password"/>
+                <label class="raleway-regular">Senha</label>
+                <input type="password" id="password" class="input"/>
             </div>
             <div class="options">
                 <div>
                     <input type="checkbox" id="checkbox">
-                    <span>Lembrar-me</span>
+                    <span class="raleway-regular">Lembrar-me</span>
                 </div>
-                <a href="../register/index.html">Esqueci minha senha</a>
+                <a href="../register/index.html" class="raleway-regular">Esqueci minha senha</a>
                 
             </div>
             <div class="form-group">
-                <input type="submit" id="button" value="Entrar"/>
+                <input type="submit" id="button" value="Entrar" class="raleway-bold"/>
             </div>
-            <span>Já tem conta? <a href="../register/index.html"><b>Entrar</b></a></span>
+            <span class="raleway-regular">Não tem conta? <a href="../register/index.html" class="raleway-bold"><b>Registrar</b></a></span>
         </form>
     </div>
     
