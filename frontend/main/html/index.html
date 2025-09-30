@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/styles.css"/>
+    <script src="https://kit.fontawesome.com/bfe862fe78.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="menu">
+            <button class="menu-button" data-page="random">
+                <i class="fa-solid fa-shuffle"></i>
+                <span>Aleatórias</span>
+            </button>
+            <button class="menu-button" data-page="today">
+                <i class="fa-solid fa-calendar-day"></i>
+                Hoje
+            </button>
+            <button class="menu-button" data-page="projects">
+                <i class="fa-solid fa-briefcase"></i>
+                Projetos
+            </button>
+            <button class="menu-button" data-page="habits">
+                <i class="fa-solid fa-glass-water"></i>
+                Hábitos
+            </button>
+            <button class="menu-button" data-page="check">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Concluídos</span>
+            </button>
+        </div>
+        <div class="content-container">
+            <div class="content" id="random">
+                <h1>ALEATÓRIAS</h1>
+            </div>
+            <div class="content" id="today">
+                <h1>HOJE</h1>
+            </div>
+            <div class="content" id="projects">
+                <h1>PROJETOS</h1>
+            </div>
+            <div class="content" id="habits">
+                <h1>HÁBITOS</h1>
+            </div>
+            <div class="content" id="check">
+                <h1>CONCLUÍDAS</h1>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js" type="module"></script>
+</body>
+</html>

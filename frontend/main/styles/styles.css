@@ -1,0 +1,51 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    background-color: #f3ecec;
+    height: 100%;
+    width: 250px;
+    padding: 20px;
+}
+
+.menu-button {
+    display:flex;
+    flex-direction: row;
+    justify-content: left;
+    gap: 10px;
+    align-items: center;
+    background-color: transparent;
+    border: 0px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.button-active {
+    background-color: #aec49b;
+    color: #379634;
+}
+
+.content-container {
+    width: 100%;
+}
+
+.content {
+    display: none
+}
+
+.content-block {
+    display: block
+}
