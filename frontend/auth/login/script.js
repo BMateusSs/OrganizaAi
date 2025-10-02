@@ -28,7 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (error){
             errorMessage.textContent=error
+            return
         }
+
+        const token = data.token
+        localStorage.setItem('token', token)
 
     })
 
