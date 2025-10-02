@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const token = data.token
         localStorage.setItem('token', token)
-
+        window.location.href='../../main/html/index.html'
     })
 
 })
