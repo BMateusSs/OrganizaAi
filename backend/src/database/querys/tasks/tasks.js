@@ -30,3 +30,12 @@ export async function createTask(task_info){
     return result.insertId
 }
 
+export async function readTask(user_id){
+    const query = `
+        SELECT * FROM tasks
+        WHERE project_id IS NULL AND user_id = ? AND due_date = CURDATE()
+    `
+
+    const [rows, fields] = await db.execute(query, [user_id])
+    return rows
+}
