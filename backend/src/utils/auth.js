@@ -25,18 +25,24 @@ export function createToken(userId){
 
 export function validateToken(req, res, next) {
     const header = req.headers['authorization']
+    console.log('HEADER: ', header)
     const token = header && header.split(" ")[1]
+    console.log('TOKEN: ', token)
 
     if (!token){
         return res.status(401).json({message: 'Token não encontrado'})
     }
 
     try{
+        console.log('ENTROU NO TRY')
         const SECRET = process.env.SECRET_KEY
+        console.log('SECRET KEY: ', SECRET)
         const payload = jwt.verify(token, SECRET)
+        console.log('PAYLOAD: ', payload)
         req.userId = payload.userId
         next()
     }catch(err){
+        console.log('ENTROU NO CATCH')
         return res.status(403).json({message: 'Token inválido ou expirado'})
     }
 }
