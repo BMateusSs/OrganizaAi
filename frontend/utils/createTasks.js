@@ -1,4 +1,4 @@
-import { methodPost } from './methods.js'
+import { methodPost, methodGet } from './methods.js'
 import useFetch from './fetch.js'
 
 export async function createTask(task_infos){
@@ -6,7 +6,7 @@ export async function createTask(task_infos){
     const config = methodPost(body)
     const url = "http://localhost:3000/tasks/create_task"
 
-    const {data, error} = useFetch(url, config)
+    const {data, error} = await useFetch(url, config)
 
     if (error){
         console.log(error)
@@ -14,4 +14,22 @@ export async function createTask(task_infos){
     }
 
     console.log('Tarefa criada com sucesso!')
+}
+
+export async function readTask() {
+    const config = methodGet()
+    const url = "http://localhost:3000/tasks/read_task"
+
+    const {data, error} = await useFetch(url, config)
+
+    if (error){
+        console.log(error)
+        return
+    }
+
+    return data
+}
+
+export async function updateTask(){
+    console.log('jneeirgnoern')
 }
