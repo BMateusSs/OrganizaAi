@@ -30,6 +30,15 @@ export async function readTask() {
     return data
 }
 
-export async function updateTask(){
-    console.log('jneeirgnoern')
+export async function updateTaskStatus(taskId){
+    const body = {
+        taskId: taskId,
+        isCompleted: true
+    }
+
+    const config = methodPost(body)
+
+    const url = 'http://localhost:3000/tasks/complete_task'
+
+    const {data, error} = await useFetch(url, config)
 }
