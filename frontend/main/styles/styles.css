@@ -64,10 +64,11 @@ html, body {
     width: 100%;
     display: flex;
     justify-content: center;
+    overflow: scroll;
 }
 
 .content {
-    display: none
+    display: none;
 }
 
 .content-block {
@@ -250,6 +251,7 @@ textarea:focus {
     border: 0px;
     background-color: transparent;
     color: #000;
+    margin-bottom: 50px;
 }
 
 .create-button:hover {

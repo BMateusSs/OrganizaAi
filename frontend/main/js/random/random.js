@@ -1,4 +1,4 @@
-import { readTask } from "../../../utils/createTasks.js";
+import { readProjectTasks, updateTaskStatus } from "../../../utils/createTasks.js";
 import { taskFormModal } from "../../../utils/taskFormModal.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function renderTasks() {
         taskList.innerHTML = '';
     
-        const data = await readTask();
+        const data = await readProjectTasks(null);
         const tasks = await data.tasks;
     
         tasks.forEach(task => {
