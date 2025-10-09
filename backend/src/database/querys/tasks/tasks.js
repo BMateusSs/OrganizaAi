@@ -73,3 +73,26 @@ function buildUpdateQuery(user_id, task_id, updates){
 
     return {query, values}
 }
+
+export async function readProjectTasks(user_id, project) {
+    let query;
+    let params = [user_id];
+
+    if (project) {
+        query = `
+            SELECT * FROM tasks
+            WHERE project_id = ? AND user_id = ? AND completed = 0;
+        `;
+        params.unshift(project); 
+
+    } else {
+        query = `
+            SELECT * FROM tasks
+            WHERE project_id IS NULL AND user_id = ? AND completed = 0;
+        `;
+    }
+
+    const [rows, fields] = await db.execute(query, params);
+
+    return rows;
+}

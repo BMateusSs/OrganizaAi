@@ -30,6 +30,21 @@ export async function readTask() {
     return data
 }
 
+export async function readProjectTasks(project) {
+    const body = {project: project}
+    const config = methodPost(body)
+    const url = "http://localhost:3000/tasks/read_project_tasks"
+
+    const {data, error} = await useFetch(url, config)
+
+    if (error){
+        console.log(error)
+        return
+    }
+
+    return data
+}
+
 export async function updateTaskStatus(taskId){
     const body = {
         taskId: taskId,

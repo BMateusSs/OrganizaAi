@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createTask, readTask, checkCompleted } from '../database/querys/tasks/tasks.js';
+import { createTask, readTask, checkCompleted, readProjectTasks } from '../database/querys/tasks/tasks.js';
 import { validateToken } from '../utils/auth.js';
 
 const tasksRouter = Router(); 
@@ -28,8 +28,20 @@ tasksRouter.get('/read_task', validateToken, async (req, res) => {
     try {
         const user_id = req.userId
         const tasks = await readTask(user_id)
-        console.log('USER: ', user_id)
-        console.log(tasks)
+
+        res.status(200).json({tasks})
+
+    }catch (error){
+        res.status(500).json({message: "Erro ao buscar tarefas"})
+    }
+})
+
+tasksRouter.post('/read_project_tasks', validateToken, async (req, res) => {
+    try {
+        const user_id = req.userId
+        const project = req.body.project
+        const tasks = await readProjectTasks(user_id, project)
+        console.log("tarefas: ", tasks)
 
         res.status(200).json({tasks})
 
