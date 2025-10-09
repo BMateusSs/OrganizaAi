@@ -33,9 +33,43 @@ export async function createTask(task_info){
 export async function readTask(user_id){
     const query = `
         SELECT * FROM tasks
-        WHERE project_id IS NULL AND user_id = ? AND due_date = CURDATE()
+        WHERE project_id IS NULL AND user_id = ? AND due_date = CURDATE() AND completed = 0;
     `
 
     const [rows, fields] = await db.execute(query, [user_id])
     return rows
+}
+
+export async function checkCompleted(userId, taskId, isCompleted){
+    
+    const query = `
+        UPDATE tasks
+        SET completed = ?,
+            completed_at = CASE WHEN ? THEN NOW() ELSE NULL END
+        WHERE user_id = ? AND id = ?
+    `
+
+    const values = [isCompleted, isCompleted, userId, taskId]
+    const [result] = await db.execute(query, values)
+    return result.affectedRows
+
+}
+
+function buildUpdateQuery(user_id, task_id, updates){
+    const placeHolders = []
+    const values = []
+
+    for (const key in updates){
+        if (Object.prototype.hasOwnProperty.call(updates, key)){
+            placeHolders.push(`${key} = ?`)
+            values.push(updates[key])
+        }
+    }
+
+    const setContent = placeHolders.join(', ')
+    const query = `UPDATE tasks SET ${setContent} WHERE user_id = ? AND id = ?`
+    values.push(user_id)
+    values.push(task_id)
+
+    return {query, values}
 }
