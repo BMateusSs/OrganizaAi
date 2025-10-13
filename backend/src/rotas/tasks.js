@@ -39,8 +39,8 @@ tasksRouter.get('/read_task', validateToken, async (req, res) => {
 tasksRouter.post('/read_project_tasks', validateToken, async (req, res) => {
     try {
         const user_id = req.userId
-        const project = req.body.project
-        const tasks = await readProjectTasks(user_id, project)
+        const proj_id = req.body.proj_id
+        const tasks = await readProjectTasks(user_id, proj_id)
         console.log("tarefas: ", tasks)
 
         res.status(200).json({tasks})
