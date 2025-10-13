@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, readProject } from '../database/querys/projects/projects.js'
+import { createProject, readProject, allProjects } from '../database/querys/projects/projects.js'
 import { validateToken } from '../utils/auth.js'
 
 const projectRouter = Router()
@@ -29,6 +29,21 @@ projectRouter.get('/read_projects', validateToken, async (req, res) => {
     }catch(error){
         return res.status(500).json({'message': 'Erro ao buscar projetos'})
     }
+})
+
+projectRouter.get('all_projects', validateToken, async (req, res) => {
+    try{
+        const userId = req.userId
+
+        projects = await allProjects(userId)
+
+        return res.status(200).json({projects})
+
+    }catch(error){
+        return res.status(500).json({message: "Erro ao buscar nome dos projetos"})
+    }
+    
+
 })
 
 export default projectRouter

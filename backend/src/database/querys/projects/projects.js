@@ -35,7 +35,7 @@ export async function readProject(userId){
     return rows
 }
 
-export async function all_projects(user_id) {
+export async function allProjects(user_id) {
     const query = `
         SELECT id, name
         FROM projects
