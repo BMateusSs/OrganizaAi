@@ -30,8 +30,8 @@ export async function readTask() {
     return data
 }
 
-export async function readProjectTasks(project) {
-    const body = {project: project}
+export async function readProjectTasks(proj_id) {
+    const body = {proj_id: proj_id}
     const config = methodPost(body)
     const url = "http://localhost:3000/tasks/read_project_tasks"
 
