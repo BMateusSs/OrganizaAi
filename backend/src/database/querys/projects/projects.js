@@ -34,3 +34,14 @@ export async function readProject(userId){
 
     return rows
 }
+
+export async function all_projects(user_id) {
+    const query = `
+        SELECT id, name
+        FROM projects
+        WHERE user_id = ?
+    `
+    const [rows, fields] = await db.execute(query, [user_id])
+
+    return rows
+}
