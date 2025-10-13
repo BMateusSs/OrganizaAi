@@ -36,10 +36,13 @@ html, body {
 .menu {
     display: flex;
     flex-direction: column;
-    background-color: #f3ecec;
+    background-color: #F6F5F4;
     height: 100%;
     width: 250px;
     padding: 20px;
+    box-shadow: 1px 0 4px rgba(0, 0, 0, 0.06), 
+                0 1px 2px rgba(0, 0, 0, 0.04);
+
 }
 
 .menu-button {
@@ -76,6 +79,7 @@ html, body {
     width: 100%;
     height: 100%;
     padding-left: 350px;
+    background-color: #FAFAFA;
 }
 
 .modal-overlay {
@@ -103,6 +107,10 @@ html, body {
     gap: 10px;
 }
 
+.project {
+    width: 400px;
+}
+
 .today-list {
     width: 700px;
     display: flex;
@@ -121,7 +129,6 @@ html, body {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
-
 
 .content-task-container {
     background-color: #fff;
@@ -321,7 +328,167 @@ textarea:focus {
 .amaranth { background-color: #DB324D; }
 
 .pick-layout {
-    padding: 40px;
     border-radius: 10px;
     background-color: #e3eaf1;
+    display:flex;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.layout-icon{
+    margin: 10px
+}
+
+.layout-button {
+    border: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.layout-button-active {
+    background-color: #fff;
+}
+
+.project-list {
+    max-width: 700px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px; /* espaço entre os cards */
+    justify-items: center; /* centraliza os cards nas colunas */
+
+}
+
+.card-project {
+    width: 150px;
+    height: 150px;
+    border-radius: 15px;
+    margin: 10px;
+    border-radius: 3px solid black;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.header-project {
+    background-color: #8bb47e;
+    height: 30%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.infos-project {
+    flex: 1;
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.date-container {
+    border-top:2px solid #F6F5F4;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.search-bar-container {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #F6F5F4;
+    border-radius: 12px;
+    padding-left: 5px;
+    gap: 12px;
+    flex: 1;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.search-bar i {
+    color: #000;
+    font-size: 18px;
+}
+
+.search-bar input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+
+    font-size: 16px;
+    flex: 1;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+}
+
+.search-bar input::placeholder {
+    color: #000;
+    font-weight: 500;
+}
+
+.search-bar-container button {
+    background-color: #F6F5F4;
+    color:#000;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "Raleway", sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+.search-bar-container button:hover {
+    color:#8bb47e;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .search-bar-container {
+        width: 90%;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .search-bar {
+        width: 100%;
+    }
+    
+    .search-bar-container button {
+        width: 100%;
+        padding: 14px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-bar-container {
+        width: 95%;
+        padding: 0 10px;
+    }
+    
+    .search-bar {
+        padding: 10px 12px;
+    }
+    
+    .search-bar i {
+        font-size: 16px;
+    }
+    
+    .search-bar input {
+        font-size: 14px;
+    }
 }
