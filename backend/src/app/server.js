@@ -1,6 +1,7 @@
 import express from 'express';
 import router from '../rotas/public.js';
 import tasksRouter from '../rotas/tasks.js';
+import projectRouter from '../rotas/projects.js';
 import cors from 'cors'
 
 const app = express();
@@ -10,6 +11,7 @@ app.use(cors())
 
 app.use(router)
 app.use('/tasks', tasksRouter)
+app.use('/projects', projectRouter)
 
 app.listen(3000, () => {
     console.log("Rodando o servidor na porta 3000")
