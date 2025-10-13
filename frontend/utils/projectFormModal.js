@@ -1,11 +1,10 @@
 import { createTask, readTask, updateTaskStatus } from "./createTasks.js"
+import { createProject } from "./fetchProjects.js"
 
-export async function projectFormModal(content, options = {}) {
-    const {
-        defaultProject = 'aleatoria',
-        defaultDate = '',
-        onTaskCreated
-    } = options;
+export async function projectFormModal(content, renderProjects) {
+    let name
+    let color
+    let layout_type
 
     const taskModal = document.createElement('div');
     taskModal.classList.add("modal-overlay");
@@ -14,6 +13,7 @@ export async function projectFormModal(content, options = {}) {
 
     const taskForm = document.createElement('div');
     taskForm.classList.add('modal-content');
+    taskForm.classList.add('project')
     taskForm.innerHTML = `
       <h2 class="modal-title raleway-bold">Criar Novo Projeto</h2>
       <div>
@@ -39,8 +39,8 @@ export async function projectFormModal(content, options = {}) {
       <div>
         <label class="raleway-regular">Layout</label>
         <div class="pick-layout">
-          <button>Lista</button>
-          <button>Kanban</button>
+          <button class="layout-button" id="layout-list"><i class="fa-solid fa-list-ul layout-icon"></i> <span>Lista</span></button>
+          <button class="layout-button" id="layout-kanban"><i class="fa-solid fa-table-columns layout-icon"></i><span>Kanban</span></button>
         </div>
       </div>
       <div class="buttons-container">
@@ -61,10 +61,27 @@ export async function projectFormModal(content, options = {}) {
     dropdownContent.querySelectorAll('div').forEach(option => {
       option.addEventListener('click', () => {
         const colorName = option.dataset.color;
-        const colorClass = option.classList[0];
+        const colorClass = option.querySelector('div')?.classList[1] || null;
+        console.log(colorClass)
         btn.innerHTML = `<div class="circle ${colorClass}"></div> ${colorName}`;
         dropdownContent.style.display = "none";
-      })
+        color = colorName
+      })  
+    })
+
+    const layoutList = taskForm.querySelector('#layout-list')
+    const layoutKanban = taskForm.querySelector('#layout-kanban')
+
+    layoutList.addEventListener('click', () => {
+      layoutKanban.classList.remove('layout-button-active')
+      layoutList.classList.add('layout-button-active')
+      layout_type = 'LIST'
+    })
+
+    layoutKanban.addEventListener('click', () => {
+      layoutList.classList.remove('layout-button-active')
+      layoutKanban.classList.add('layout-button-active')
+      layout_type = 'KANABAN'
     })
 
     const cancelButton = taskForm.querySelector('.cancel-button');
@@ -72,5 +89,16 @@ export async function projectFormModal(content, options = {}) {
       content.removeChild(taskModal);
       taskModal.removeChild(taskForm);
     });
+
+    const confirmButton = taskForm.querySelector('.confirm-button')
+    confirmButton.addEventListener('click', async () => {
+      name = taskForm.querySelector('#title').value
+      await createProject(name, color, layout_type)
+
+      taskModal.remove()
+      
+      await renderProjects()
+      
+    })
     
   }
