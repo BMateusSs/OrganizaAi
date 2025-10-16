@@ -1,7 +1,7 @@
 import { projectFormModal } from "../../../utils/projectFormModal.js"
-import { readProject } from "../../../utils/fetchProjects.js"
+import { readProject, projectColumns } from "../../../utils/fetchProjects.js"
 import { formatDate } from "../../../utils/formatDates.js"
-import { readProjectTasks } from "../../../utils/createTasks.js"
+import { readProjectTasks, updateTaskStatus } from "../../../utils/createTasks.js"
 import { taskFormModal } from "../../../utils/taskFormModal.js"
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -47,7 +47,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             colorHeader.style.backgroundColor = project.code
 
             card.addEventListener('click', async () => {
-                await showProjectList(content, project.id, project.name, project.layout_type, project.color)
+              if (project.layout_type === 'LIST'){
+                await showProjectList(content, project.id, project.name, project.layout_type, project.color, project.code)
+              }else {
+                await showProjectKanban(content, project.id, project.name, project.layout_type, project.color, project.code)
+              }
+
             })
             
         });
@@ -61,10 +66,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 })
 
-async function showProjectList(content, id, name, layout, color){
+async function showProjectList(content, id, name, layout, color, code){
     content.innerHTML=``
     const taskList = document.createElement('div')
-    taskList.classList.add('project-list')
+    taskList.classList.add('today-list');
 
     const title = document.createElement('h1')
     title.textContent = name
@@ -105,8 +110,9 @@ async function showProjectList(content, id, name, layout, color){
                   </div>
                 </div>
               `;
-        
+              card.querySelector(".check-container").style.backgroundColor = code
               const buttonCheck = card.querySelector('.check-button');
+              buttonCheck.style.backgroundColor = code
               buttonCheck.addEventListener('click', async () => {
                 buttonCheck.classList.toggle('checked');
                 const taskId = task.id
@@ -123,7 +129,101 @@ async function showProjectList(content, id, name, layout, color){
         await renderTasks();
 
     addTask.addEventListener('click', async() => {
-        taskFormModal(content)
+        const options = {
+                defaultProject: id,
+                onTaskCreated: renderTasks
+              } 
+        taskFormModal(content, options)
     })
         
+}
+
+async function showProjectKanban(content, id, name, layout, color, code) {
+  content.innerHTML = ''
+
+  const kanbanList = document.createElement('div')
+  kanbanList.classList.add('container-kanbans')
+
+  const title = document.createElement('h1')
+  title.textContent = name
+  content.appendChild(title)
+  content.appendChild(kanbanList)
+
+  const addColumn = document.createElement('button')
+  addColumn.innerHTML = '+ Adicionar lista'
+  addColumn.classList.add('add-kanban')
+
+  const data = await projectColumns(id)
+  const columns = data.columns
+
+  columns.forEach(column => {
+    const card = document.createElement('div')
+
+    card.innerHTML = `
+      <div class="kanban-header">
+        <span class="raleway-regular">${column.name}</span>
+        <button class="kanban-options">...</button>
+      </div>
+      <div class="kanban-content" id="${column.id}">
+      </div>
+    `
+
+    card.classList.add('kanban-column')
+    kanbanList.appendChild(card)
+  })
+
+  const dataTask = await readProjectTasks(id)
+  const tasks = await dataTask.tasks
+
+  console.log(tasks)
+
+  tasks.forEach(task => {
+    console.log('id coluna', task.column_id)
+    const cardTask = document.createElement('div')
+    cardTask.classList.add('test-card')
+    cardTask.draggable = true
+    cardTask.innerHTML = `<p>${task.title}</p>`
+
+    const targetColumn = document.getElementById(task.column_id)
+    if (targetColumn) {
+      targetColumn.appendChild(cardTask)
+    } else {
+      console.warn(`Coluna com id ${task.column_id} não encontrada`)
+    }
+  })
+
+  let draggedCard
+  const columnsKanbans = kanbanList.querySelectorAll('.kanban-content')
+  const cards = kanbanList.querySelectorAll('.test-card')
+
+  cards.forEach(card => {
+    card.addEventListener('dragstart', (event) => {
+      draggedCard = event.target
+    })
+  })
+
+  columnsKanbans.forEach(column => {
+    column.addEventListener('dragover', (event) => {
+      event.preventDefault()
+    })
+
+    column.addEventListener('dragenter', ({ target }) => {
+      if (target.classList.contains('kanban-content')) {
+        target.classList.add('enter')
+      }
+    })
+
+    column.addEventListener('dragleave', () => {
+      column.classList.remove('enter')
+    })
+
+    column.addEventListener('drop', ({ target }) => {
+      if (target.classList.contains('kanban-content')) {
+        column.appendChild(draggedCard)
+        column.classList.remove('enter')
+      }
+    })
+  })
+
+  kanbanList.appendChild(addColumn)
 }
