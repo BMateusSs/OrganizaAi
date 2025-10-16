@@ -1,5 +1,5 @@
 import { createTask, readTask, updateTaskStatus } from "./createTasks.js"
-import { createProject } from "./fetchProjects.js"
+import { createProject, projectsName} from "./fetchProjects.js"
 
 export async function projectFormModal(content, renderProjects) {
     let name
