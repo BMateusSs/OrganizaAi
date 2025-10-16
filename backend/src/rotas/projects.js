@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, readProject, allProjects } from '../database/querys/projects/projects.js'
+import { createProject, readProject, allProjects, projectColumns } from '../database/querys/projects/projects.js'
 import { validateToken } from '../utils/auth.js'
 
 const projectRouter = Router()
@@ -31,11 +31,11 @@ projectRouter.get('/read_projects', validateToken, async (req, res) => {
     }
 })
 
-projectRouter.get('all_projects', validateToken, async (req, res) => {
+projectRouter.get('/all_projects', validateToken, async (req, res) => {
     try{
         const userId = req.userId
 
-        projects = await allProjects(userId)
+        const projects = await allProjects(userId)
 
         return res.status(200).json({projects})
 
@@ -44,6 +44,21 @@ projectRouter.get('all_projects', validateToken, async (req, res) => {
     }
     
 
+})
+
+projectRouter.post('/project_columns', validateToken, async (req, res) => {
+
+    try {
+        const userId = req.userId
+        const projId = req.body.projId
+
+        const columns = await projectColumns(userId, projId)
+
+        return res.status(200).json({columns})
+        
+    }catch(error){
+        return res.status(500).json({message: "Erro ao buscar colunas"})
+    }
 })
 
 export default projectRouter
