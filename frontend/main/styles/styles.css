@@ -456,6 +456,60 @@ textarea:focus {
     color:#8bb47e;
 }
 
+.container-kanbans {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.kanban-column {
+    width: 250px;
+    height: 100%;
+    margin: 10px;
+}
+
+.kanban-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-kanban {
+    height: 3%;
+    padding: 0%;
+    margin: 10px;
+}
+
+.kanban-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.kanban-content {
+    width: 100%;
+    height: 80%;
+    background-color: #379634;
+    padding: 5px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.kanban-content.enter {
+    border: 2px solid #000;
+}
+
+.test-card {
+    width: 100%;
+    height: 100px;
+    background-color: #8fb8de;
+    border-radius: 10px;
+    
+}
+
 /* Responsividade para dispositivos móveis */
 @media (max-width: 768px) {
     .search-bar-container {
