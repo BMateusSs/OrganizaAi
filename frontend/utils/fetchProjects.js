@@ -35,3 +35,36 @@ export async function readProject(){
 
     return data
 }
+
+export async function projectsName(){
+
+    const config = methodGet()
+
+    const url = 'http://localhost:3000/projects/all_projects'
+
+    const {data, error} = await useFetch(url, config)
+
+    if (error){
+        alert(error)
+    }
+
+    return data
+}
+
+export async function projectColumns(projId){
+    const body = {
+        projId: projId
+    }
+
+    const config = methodPost(body)
+
+    const url = 'http://localhost:3000/projects/project_columns'
+
+    const {data, error} = await useFetch(url, config)
+
+    if (error){
+        alert(error)
+    }
+
+    return data
+}
