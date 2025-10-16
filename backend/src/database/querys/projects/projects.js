@@ -45,3 +45,15 @@ export async function allProjects(user_id) {
 
     return rows
 }
+
+export async function projectColumns(userId, projId) {
+    const query = `
+        SELECT id, name
+        FROM columns_kanban
+        WHERE project_id = ?
+        ORDER BY \`order\`;
+    `
+
+    const [rows, fields] = await db.execute(query, [projId])
+    return rows
+}
