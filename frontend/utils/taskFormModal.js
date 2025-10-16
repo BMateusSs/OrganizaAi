@@ -1,85 +1,100 @@
-import { createTask, readTask, updateTaskStatus } from "./createTasks.js"
+import { createTask } from "./createTasks.js"
+import { projectsName } from "./fetchProjects.js";
 
 export async function taskFormModal(content, options = {}) {
-    const {
-        defaultProject = 'aleatoria',
-        defaultDate = '',
-        onTaskCreated
-    } = options;
+  const {
+    defaultProject = 'aleatoria',
+    defaultDate = '',
+    onTaskCreated
+  } = options;
 
-    const taskModal = document.createElement('div');
-    taskModal.classList.add("modal-overlay");
+  // cria o overlay do modal
+  const taskModal = document.createElement('div');
+  taskModal.classList.add("modal-overlay");
+  content.appendChild(taskModal);
 
-    content.appendChild(taskModal);
+  // cria o elemento principal do modal
+  const taskForm = document.createElement('div');
+  taskForm.classList.add('modal-content');
+  taskForm.innerHTML = `
+    <h2 class="modal-title raleway-bold">Criar Nova Tarefa</h2>
+    <div>
+      <label class="raleway-regular">Título da tarefa</label>
+      <input type="text" id="title" placeholder="Ex: Estudar para a prova"/>
+    </div>
+    <div>
+      <label class="raleway-regular">Descrição</label>
+      <textarea id="description" rows="4" class="raleway-thin" placeholder="Detalhes..."></textarea>
+    </div>
+    <div class="additionals-infos raleway-regular">
+      <input type="date" id="due-date" class="raleway-thin"/>
+    </div>
+    <div class="buttons-container">
+      <button class="button cancel-button raleway-regular">Cancelar</button>
+      <button class="button confirm-button raleway-regular">Adicionar Tarefa</button>
+    </div>
+  `;
+  taskModal.appendChild(taskForm);
 
-    const taskForm = document.createElement('div');
-    taskForm.classList.add('modal-content');
-    taskForm.innerHTML = `
-      <h2 class="modal-title raleway-bold">Criar Nova Tarefa</h2>
-      <div>
-        <label class="raleway-regular">Título da tarefa</label>
-        <input type="text" id="title" placeholder="Ex: Estudar para a prova"/>
-      </div>
-      <div>
-        <label class="raleway-regular">Descrição</label>
-        <textarea id="description" rows="4" class="raleway-thin" placeholder="Detalhes..."></textarea>
-      </div>
-      <div class="additionals-infos raleway-regular">
-        <select id="project-select">
-          <option selected value="aleatoria">Aleatórias</option>
-          <option value="Organiza-Aí">Organiza-Aí</option>
-          <option value="javascript">Curso JavaScript</option>
-        </select>
-        <input type="date" id="due-date" class="raleway-thin"/>
-      </div>
-      <div class="buttons-container">
-        <button class="button cancel-button raleway-regular">Cancelar</button>
-        <button class="button confirm-button raleway-regular">Adicionar Tarefa</button>
-      </div>
-    `;
+  // cria o select de projetos
+  const projectSelect = document.createElement('select');
+  projectSelect.id = 'project-select';
 
-    taskModal.appendChild(taskForm);
+  const data = await projectsName();
+  projects = await data.projects
+  projects.forEach(project => {
+    const option = document.createElement('option');
+    option.value = project.id;
+    option.textContent = project.name;
+    projectSelect.appendChild(option);
+  });
 
-    const selectProject = document.getElementById('project-select')
-    const dueDateInput = document.getElementById('due-date')
+  // adiciona o select dentro da div additionals-infos
+  const additionalInfos = taskForm.querySelector('.additionals-infos');
+  additionalInfos.prepend(projectSelect);
 
-    selectProject.value = defaultProject
-    dueDateInput.value = defaultDate
+  // define valores padrão (se existirem)
+  projectSelect.value = defaultProject;
+  const dueDateInput = document.getElementById('due-date');
+  dueDateInput.value = defaultDate;
 
-    const confirmButton = taskForm.querySelector('.confirm-button');
-    confirmButton.addEventListener('click', async () => {
-      const user_id = 8;
-      const title = document.getElementById('title').value || null;
-      const description = document.getElementById('description').value || null;
-      const project_id = null;
-      const collumn_id = null;
-      const is_habit = false;
-      const recurrence = null;
-      const due_date = document.getElementById('due-date').value || null;
+  // botão confirmar
+  const confirmButton = taskForm.querySelector('.confirm-button');
+  confirmButton.addEventListener('click', async () => {
+    const user_id = 8;
+    const title = document.getElementById('title').value || null;
+    const description = document.getElementById('description').value || null;
+    const project_id = projectSelect.value || null;
+    const collumn_id = null;
+    const is_habit = false;
+    const recurrence = null;
+    const due_date = document.getElementById('due-date').value || null;
 
-      const task_info = {
-        user_id,
-        title,
-        description,
-        project_id,
-        collumn_id,
-        is_habit,
-        recurrence,
-        due_date
-      };
+    const task_info = {
+      user_id,
+      title,
+      description,
+      project_id,
+      collumn_id,
+      is_habit,
+      recurrence,
+      due_date
+    };
 
-      await createTask(task_info);
+    await createTask(task_info);
 
-      content.removeChild(taskModal);
-      taskModal.removeChild(taskForm);
+    // remove o modal
+    content.removeChild(taskModal);
 
+    // executa callback (se houver)
+    if (onTaskCreated) {
       await onTaskCreated();
-    });
+    }
+  });
 
-    const cancelButton = taskForm.querySelector('.cancel-button');
-    cancelButton.addEventListener('click', () => {
-      content.removeChild(taskModal);
-      taskModal.removeChild(taskForm);
-    });
-    
-  }
+  // botão cancelar
+  const cancelButton = taskForm.querySelector('.cancel-button');
+  cancelButton.addEventListener('click', () => {
+    content.removeChild(taskModal);
+  });
+}
