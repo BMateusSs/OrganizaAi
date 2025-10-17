@@ -8,6 +8,7 @@ tasksRouter.post('/create_task', async (req, res) => {
     const task_infos = req.body;
     
     try {
+        console.log(task_infos)
         const taskId = await createTask(task_infos);
 
         return res.status(201).json({
@@ -19,7 +20,7 @@ tasksRouter.post('/create_task', async (req, res) => {
         console.error("Erro ao criar tarefa:", error); 
         
         return res.status(500).json({ 
-            message: "Falha ao criar tarefa devido a um erro interno do servidor."
+            message: error, 
         });
     }
 });
