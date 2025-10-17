@@ -3,22 +3,12 @@ import { readProject, projectColumns } from "../../../utils/fetchProjects.js"
 import { formatDate } from "../../../utils/formatDates.js"
 import { readProjectTasks, updateTaskStatus } from "../../../utils/createTasks.js"
 import { taskFormModal } from "../../../utils/taskFormModal.js"
+import { updateColumnId, createColumn } from "../../../utils/fetchKanbans.js"
 
 document.addEventListener('DOMContentLoaded', async () => {
     const content = document.getElementById('projects')
 
     const projectList = document.createElement('div')
-
-    const projectHeader = document.createElement('div')
-    const searchBar = document.createElement('input')
-    const addProjectButton = document.createElement('button')
-    
-    addProjectButton.textContent='Adicionar projeto'
-    
-    projectHeader.appendChild(searchBar)
-    projectHeader.appendChild(addProjectButton)
-    projectList.appendChild(projectHeader)
-
     projectList.classList.add('project-list')
     content.appendChild(projectList)
 
@@ -60,6 +50,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await renderProjects()
 
+    // Adicionar event listener ao botão do HTML
+    const addProjectButton = content.querySelector('button')
     addProjectButton.addEventListener('click', async () => {
         await projectFormModal(content, renderProjects)
     })
@@ -152,7 +144,9 @@ async function showProjectKanban(content, id, name, layout, color, code) {
   const addColumn = document.createElement('button')
   addColumn.innerHTML = '+ Adicionar lista'
   addColumn.classList.add('add-kanban')
+ 
 
+  // Renderiza colunas existentes
   const data = await projectColumns(id)
   const columns = data.columns
 
@@ -164,34 +158,28 @@ async function showProjectKanban(content, id, name, layout, color, code) {
         <span class="raleway-regular">${column.name}</span>
         <button class="kanban-options">...</button>
       </div>
-      <div class="kanban-content" id="${column.id}">
-      </div>
+      <div class="kanban-content" id="${column.id}"></div>
     `
-
     card.classList.add('kanban-column')
     kanbanList.appendChild(card)
   })
 
+  // Renderiza tarefas
   const dataTask = await readProjectTasks(id)
   const tasks = await dataTask.tasks
 
-  console.log(tasks)
-
   tasks.forEach(task => {
-    console.log('id coluna', task.column_id)
     const cardTask = document.createElement('div')
     cardTask.classList.add('test-card')
     cardTask.draggable = true
     cardTask.innerHTML = `<p>${task.title}</p>`
+    cardTask.id = task.id
 
     const targetColumn = document.getElementById(task.column_id)
-    if (targetColumn) {
-      targetColumn.appendChild(cardTask)
-    } else {
-      console.warn(`Coluna com id ${task.column_id} não encontrada`)
-    }
+    if (targetColumn) targetColumn.appendChild(cardTask)
   })
 
+  // Funções de drag and drop
   let draggedCard
   const columnsKanbans = kanbanList.querySelectorAll('.kanban-content')
   const cards = kanbanList.querySelectorAll('.test-card')
@@ -203,27 +191,67 @@ async function showProjectKanban(content, id, name, layout, color, code) {
   })
 
   columnsKanbans.forEach(column => {
-    column.addEventListener('dragover', (event) => {
-      event.preventDefault()
-    })
+    column.addEventListener('dragover', (event) => event.preventDefault())
 
     column.addEventListener('dragenter', ({ target }) => {
-      if (target.classList.contains('kanban-content')) {
-        target.classList.add('enter')
-      }
+      if (target.classList.contains('kanban-content')) target.classList.add('enter')
     })
 
-    column.addEventListener('dragleave', () => {
-      column.classList.remove('enter')
-    })
+    column.addEventListener('dragleave', () => column.classList.remove('enter'))
 
-    column.addEventListener('drop', ({ target }) => {
+    column.addEventListener('drop', async ({ target }) => {
       if (target.classList.contains('kanban-content')) {
         column.appendChild(draggedCard)
         column.classList.remove('enter')
+        await updateColumnId(draggedCard.id, column.id)
       }
     })
   })
 
   kanbanList.appendChild(addColumn)
+
+  // --- Comportamento do botão "Adicionar lista" ---
+  addColumn.addEventListener('click', () => {
+    addColumn.remove()
+
+    const formWrapper = document.createElement('div')
+    formWrapper.id = 'addColumnForm'
+    formWrapper.classList.add('add-column-container')
+
+    formWrapper.innerHTML = `
+      <div>
+        <input type="text" id="columnNameInput" placeholder="Nomear esta seção" class="input-column"/>
+      </div>
+      <div class="buttons">
+        <button class="confirm-column">Adicionar seção</button>
+        <button class="cancel-column">Cancelar</button>
+      </div>
+    `
+
+    kanbanList.appendChild(formWrapper)
+
+    // Botão "Adicionar"
+    formWrapper.querySelector('.confirm-column').addEventListener('click', async () => {
+      const input = formWrapper.querySelector('#columnNameInput')
+      const columnName = input.value.trim()
+
+      if (!columnName) return alert('Digite um nome para a seção!')
+
+      const order = columnsKanbans.length + 1
+      console.log(order)
+
+      await createColumn(id, columnName, order)
+      await showProjectKanban(content, id, name, layout, color, code)
+    })
+
+    // Botão "Cancelar"
+    formWrapper.querySelector('.cancel-column').addEventListener('click', () => {
+      formWrapper.remove()
+      kanbanList.appendChild(addColumn)
+    })
+
+
+
+  })
 }
+
