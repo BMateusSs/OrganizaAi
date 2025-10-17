@@ -32,8 +32,13 @@ export async function createTask(task_info){
 
 export async function readTask(user_id){
     const query = `
-        SELECT * FROM tasks
-        WHERE project_id IS NULL AND user_id = ? AND due_date = CURDATE() AND completed = 0;
+        SELECT t.id, t.column_id, t.description, t.title, p.id, p.name, p.color, c.code
+        FROM tasks t
+        LEFT JOIN projects p
+        ON t.project_id = p.id
+        LEFT JOIN colors c 
+        ON p.color = c.color
+        WHERE t.user_id = 8 AND t.due_date = CURDATE() AND t.completed = 0;
     `
 
     const [rows, fields] = await db.execute(query, [user_id])
