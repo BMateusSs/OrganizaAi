@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       card.classList.add('task-card');
 
       const description = task.description || '';
-      const project = task.project_id || 'Aleatórias';
+      const project = task.name || 'Aleatórias';
 
       card.innerHTML = `
         <div class="check-container">
@@ -54,7 +54,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     
       });
 
+      const check = card.querySelector('.check-container')
+      check.style.backgroundColor = task.code
+
+      const checkBtn = card.querySelector('.check-button')
+      checkBtn.style.backgroundColor = task.code
+
+      const contentBorde = card.querySelector('.content-task-container')
+      contentBorde.style.borderColor = task.code
+
       todayList.appendChild(card);
+
     });
   }
 
