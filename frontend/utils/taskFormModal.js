@@ -70,6 +70,15 @@ export async function taskFormModal(content, options = {}) {
     const recurrence = null;
     const due_date = document.getElementById('due-date').value || null;
 
+    console.log(user_id,
+      title,
+      description,
+      project_id,
+      collumn_id,
+      is_habit,
+      recurrence,
+      due_date)
+
     const task_info = {
       user_id,
       title,
