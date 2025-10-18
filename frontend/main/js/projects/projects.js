@@ -1,7 +1,7 @@
 import { projectFormModal } from "../../../utils/projectFormModal.js"
 import { readProject, projectColumns } from "../../../utils/fetchProjects.js"
 import { formatDate } from "../../../utils/formatDates.js"
-import { createTask, readProjectTasks, updateTaskStatus } from "../../../utils/createTasks.js"
+import { createTask, readProjectTasks, updateTaskStatus, updateTask } from "../../../utils/createTasks.js"
 import { taskFormModal } from "../../../utils/taskFormModal.js"
 import { updateColumnId, createColumn } from "../../../utils/fetchKanbans.js"
 
@@ -178,6 +178,12 @@ async function showProjectKanban(content, id, name, layout, color, code) {
     const checkBtn = cardTask.querySelector('.check-button')
     checkBtn.style.backgroundColor = 'transparent'
 
+    // Adicionar duplo clique para editar
+    cardTask.addEventListener('dblclick', () => {
+      const targetColumn = document.getElementById(task.column_id);
+      editTaskInKanban(cardTask, task, targetColumn);
+    });
+
     const targetColumn = document.getElementById(task.column_id);
     if (targetColumn) targetColumn.appendChild(cardTask);
   });
@@ -322,5 +328,65 @@ async function showProjectKanban(content, id, name, layout, color, code) {
       formWrapper.remove();
       kanbanList.appendChild(addColumn);
     });
+  });
+}
+
+// Função para editar tarefa no kanban
+async function editTaskInKanban(cardElement, task, column) {
+  // Substituir o card pelo formulário de edição
+  const editForm = document.createElement('div');
+  editForm.classList.add('kanban-edit-form');
+  
+  editForm.innerHTML = `
+    <input type="text" id="edit-task-title" value="${task.title}" placeholder="Nome da tarefa" class="raleway-thin"/>
+    <input type="date" id="edit-task-duedate" value="${task.due_date || ''}" class="raleway-thin"/>
+    <div class="edit-buttons">
+      <button class="cancel-edit">X</button>
+      <button class="save-edit"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  `;
+
+  // Substituir o card pelo formulário
+  column.insertBefore(editForm, cardElement);
+  cardElement.style.display = 'none';
+
+  // Event listeners para os botões
+  editForm.querySelector('.cancel-edit').addEventListener('click', () => {
+    editForm.remove();
+    cardElement.style.display = 'flex';
+  });
+
+  editForm.querySelector('.save-edit').addEventListener('click', async () => {
+    const newTitle = editForm.querySelector('#edit-task-title').value.trim();
+    const newDueDate = editForm.querySelector('#edit-task-duedate').value;
+
+    if (!newTitle) {
+      alert('O título da tarefa não pode estar vazio!');
+      return;
+    }
+
+    // Preparar atualizações
+    const updates = {
+      title: newTitle,
+      due_date: newDueDate || null
+    };
+
+    try {
+      // Atualizar no backend
+      await updateTask(task.id, updates);
+      
+      // Atualizar o texto no card
+      const titleElement = cardElement.querySelector('p');
+      titleElement.textContent = newTitle;
+      
+      // Remover formulário e mostrar card atualizado
+      editForm.remove();
+      cardElement.style.display = 'flex';
+      
+      console.log('Tarefa atualizada com sucesso!');
+    } catch (error) {
+      console.error('Erro ao atualizar tarefa:', error);
+      alert('Erro ao atualizar tarefa. Tente novamente.');
+    }
   });
 }

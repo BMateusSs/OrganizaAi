@@ -1,4 +1,4 @@
-import { createTask, readTask, updateTaskStatus } from "../../../utils/createTasks.js";
+import { createTask, readTask, updateTaskStatus, updateTask } from "../../../utils/createTasks.js";
 import { getTodayDate } from "../../../utils/formatDates.js";
 import { taskFormModal } from "../../../utils/taskFormModal.js";
 
@@ -63,6 +63,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const contentBorde = card.querySelector('.content-task-container')
       contentBorde.style.borderColor = task.code
 
+      // Adicionar duplo clique para editar
+      card.addEventListener('dblclick', () => {
+        editTaskInList(card, task, todayList);
+      });
+
       todayList.appendChild(card);
 
     });
@@ -77,3 +82,70 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   
 });
+
+// Função para editar tarefa em lista
+async function editTaskInList(cardElement, task, container) {
+  // Substituir o card pelo formulário de edição
+  const editForm = document.createElement('div');
+  editForm.classList.add('list-edit-form');
+  
+  editForm.innerHTML = `
+    <div class="edit-form-content">
+      <input type="text" id="edit-task-title" value="${task.title}" placeholder="Título da tarefa" class="raleway-thin"/>
+      <textarea id="edit-task-description" placeholder="Descrição..." class="raleway-thin">${task.description || ''}</textarea>
+      <input type="date" id="edit-task-duedate" value="${task.due_date || ''}" class="raleway-thin"/>
+      <div class="edit-buttons">
+        <button class="cancel-edit">Cancelar</button>
+        <button class="save-edit">Salvar</button>
+      </div>
+    </div>
+  `;
+
+  // Substituir o card pelo formulário
+  container.insertBefore(editForm, cardElement);
+  cardElement.style.display = 'none';
+
+  // Event listeners para os botões
+  editForm.querySelector('.cancel-edit').addEventListener('click', () => {
+    editForm.remove();
+    cardElement.style.display = 'flex';
+  });
+
+  editForm.querySelector('.save-edit').addEventListener('click', async () => {
+    const newTitle = editForm.querySelector('#edit-task-title').value.trim();
+    const newDescription = editForm.querySelector('#edit-task-description').value.trim();
+    const newDueDate = editForm.querySelector('#edit-task-duedate').value;
+
+    if (!newTitle) {
+      alert('O título da tarefa não pode estar vazio!');
+      return;
+    }
+
+    // Preparar atualizações
+    const updates = {
+      title: newTitle,
+      description: newDescription || null,
+      due_date: newDueDate || null
+    };
+
+    try {
+      // Atualizar no backend
+      await updateTask(task.id, updates);
+      
+      // Atualizar o conteúdo no card
+      const titleElement = cardElement.querySelector('h3');
+      const descriptionElement = cardElement.querySelector('p');
+      titleElement.textContent = newTitle;
+      descriptionElement.textContent = newDescription || '';
+      
+      // Remover formulário e mostrar card atualizado
+      editForm.remove();
+      cardElement.style.display = 'flex';
+      
+      console.log('Tarefa atualizada com sucesso!');
+    } catch (error) {
+      console.error('Erro ao atualizar tarefa:', error);
+      alert('Erro ao atualizar tarefa. Tente novamente.');
+    }
+  });
+}
