@@ -659,6 +659,154 @@ textarea:focus {
     background-color: #218838;
 }
 
+/* Formulário de edição de tarefa no kanban */
+.kanban-edit-form {
+    width: 100%;
+    padding: 8px;
+    background-color: #FFFFFF;
+    border: 2px solid #28A745;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.kanban-edit-form input[type="text"],
+.kanban-edit-form input[type="date"] {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-bottom: 6px;
+    box-sizing: border-box;
+}
+
+.kanban-edit-form input[type="text"]:focus,
+.kanban-edit-form input[type="date"]:focus {
+    outline: none;
+    border-color: #28A745;
+    box-shadow: 0 0 0 1px rgba(40, 167, 69, 0.25);
+}
+
+.kanban-edit-form .edit-buttons {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+    margin-top: 4px;
+}
+
+.kanban-edit-form .cancel-edit,
+.kanban-edit-form .save-edit {
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #CED4DA;
+    cursor: pointer;
+}
+
+.kanban-edit-form .save-edit {
+    background-color: #28A745;
+    color: white;
+    border-color: #28A745;
+}
+
+.kanban-edit-form .save-edit:hover {
+    background-color: #218838;
+    border-color: #218838;
+}
+
+.kanban-edit-form .cancel-edit {
+    background-color: #DC3545;
+    color: white;
+    border-color: #DC3545;
+}
+
+.kanban-edit-form .cancel-edit:hover {
+    background-color: #C82333;
+    border-color: #C82333;
+}
+
+/* Formulário de edição de tarefa em lista */
+.list-edit-form {
+    width: 100%;
+    margin: 5px;
+    background-color: #FFFFFF;
+    border: 2px solid #28A745;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
+.edit-form-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-form-content input[type="text"],
+.edit-form-content input[type="date"],
+.edit-form-content textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #CED4DA;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+    font-family: "Raleway", sans-serif;
+}
+
+.edit-form-content input[type="text"]:focus,
+.edit-form-content input[type="date"]:focus,
+.edit-form-content textarea:focus {
+    outline: none;
+    border-color: #28A745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+}
+
+.edit-form-content textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.edit-form-content .edit-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.edit-form-content .cancel-edit,
+.edit-form-content .save-edit {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #CED4DA;
+    cursor: pointer;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+}
+
+.edit-form-content .save-edit {
+    background-color: #28A745;
+    color: white;
+    border-color: #28A745;
+}
+
+.edit-form-content .save-edit:hover {
+    background-color: #218838;
+    border-color: #218838;
+}
+
+.edit-form-content .cancel-edit {
+    background-color: #DC3545;
+    color: white;
+    border-color: #DC3545;
+}
+
+.edit-form-content .cancel-edit:hover {
+    background-color: #C82333;
+    border-color: #C82333;
+}
+
 /* Responsividade para kanban */
 @media (max-width: 768px) {
     .container-kanbans {
