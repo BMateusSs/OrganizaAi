@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createTask, readTask, checkCompleted, readProjectTasks } from '../database/querys/tasks/tasks.js';
+import { createTask, readTask, checkCompleted, readProjectTasks, updateTask } from '../database/querys/tasks/tasks.js';
 import { validateToken } from '../utils/auth.js';
 
 const tasksRouter = Router(); 
@@ -62,6 +62,25 @@ tasksRouter.post('/complete_task', validateToken, async (req, res) => {
         return res.status(200).json({message: 'Tarefa atualizada com sucesso!', rows: rowUpdate})
         
     }catch(error){
+        res.status(500).json({message: 'Erro ao atualizar tarefa'})
+    }
+})
+
+tasksRouter.put('/update_task', validateToken, async (req, res) => {
+    try {
+        const userId = req.userId
+        const taskId = req.body.taskId
+        const updates = req.body.updates
+
+        const rowUpdate = await updateTask(userId, taskId, updates)
+
+        return res.status(200).json({
+            message: 'Tarefa atualizada com sucesso!', 
+            rows: rowUpdate
+        })
+        
+    } catch(error) {
+        console.error("Erro ao atualizar tarefa:", error)
         res.status(500).json({message: 'Erro ao atualizar tarefa'})
     }
 })

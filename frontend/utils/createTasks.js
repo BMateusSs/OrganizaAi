@@ -1,4 +1,4 @@
-import { methodPost, methodGet } from './methods.js'
+import { methodPost, methodGet, methodPut } from './methods.js'
 import useFetch from './fetch.js'
 
 export async function createTask(task_infos){
@@ -56,4 +56,24 @@ export async function updateTaskStatus(taskId){
     const url = 'http://localhost:3000/tasks/complete_task'
 
     const {data, error} = await useFetch(url, config)
+}
+
+export async function updateTask(taskId, updates) {
+    const body = {
+        taskId: taskId,
+        updates: updates
+    }
+
+    const config = methodPut(body)
+    const url = "http://localhost:3000/tasks/update_task"
+
+    const {data, error} = await useFetch(url, config)
+
+    if (error) {
+        console.log(error)
+        return
+    }
+
+    console.log('Tarefa atualizada com sucesso!')
+    return data
 }
