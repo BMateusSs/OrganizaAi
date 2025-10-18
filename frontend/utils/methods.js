@@ -21,3 +21,14 @@ export function methodGet() {
         }
     }
 }
+
+export function methodPut(body) {
+    return {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` 
+        },
+        body: JSON.stringify(body)
+    }
+}
