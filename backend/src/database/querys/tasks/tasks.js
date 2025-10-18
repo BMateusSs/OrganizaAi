@@ -101,3 +101,9 @@ export async function readProjectTasks(user_id, project) {
 
     return rows;
 }
+
+export async function updateTask(user_id, task_id, updates) {
+    const {query, values} = buildUpdateQuery(user_id, task_id, updates);
+    const [result] = await db.execute(query, values);
+    return result.affectedRows;
+}
