@@ -107,3 +107,43 @@ export async function updateTask(user_id, task_id, updates) {
     const [result] = await db.execute(query, values);
     return result.affectedRows;
 }
+
+export async function completedTasks(userId){
+    const query = `
+        SELECT * 
+        FROM tasks
+        WHERE user_id = ? AND completed = 1
+        ORDER BY completed_at DESC;
+    `
+
+    const [rows, fields] = await db.execute(query, [userId])
+    
+    const intervals = await createIntervals(rows)
+    return intervals
+}
+
+async function createIntervals(rows) {
+    let intervals = {}
+    for ( const object of rows){
+        
+        let date = object.completed_at
+        
+        let dateObj = new Date(date)
+        const onlyDate = dateObj.toISOString().split('T')[0]
+        
+        if (intervals[onlyDate]){
+            intervals[onlyDate].push(object)
+
+        }else {
+            intervals[onlyDate] = []
+            intervals[onlyDate].push()
+            intervals[onlyDate].push(object)
+            
+        }
+        
+    }
+    return intervals
+
+}
+
+completedTasks(8)
