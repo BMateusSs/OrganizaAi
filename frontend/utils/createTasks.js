@@ -77,3 +77,36 @@ export async function updateTask(taskId, updates) {
     console.log('Tarefa atualizada com sucesso!')
     return data
 }
+
+export async function readCompletedTasks() {
+    const config = methodGet()
+    const url = "http://localhost:3000/tasks/completed_tasks"
+
+    const {data, error} = await useFetch(url, config)
+
+    if (error){
+        console.log(error)
+        return
+    }
+
+    return data
+}
+
+export async function deleteTask(taskId) {
+    const body = {
+        taskId: taskId,
+    }
+
+    const config = methodPost(body)
+    const url = "http://localhost:3000/tasks/delete_task"
+
+    const {data, error} = await useFetch(url, config)
+
+    if (error) {
+        console.log(error)
+        return
+    }
+
+    console.log('Tarefa deletada com sucesso!')
+    return data
+}

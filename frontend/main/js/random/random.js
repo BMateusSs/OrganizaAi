@@ -1,4 +1,4 @@
-import { readProjectTasks, updateTaskStatus, updateTask } from "../../../utils/createTasks.js";
+import { readProjectTasks, updateTaskStatus, updateTask, deleteTask } from "../../../utils/createTasks.js";
 import { taskFormModal } from "../../../utils/taskFormModal.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
         tasks.forEach(task => {
           const card = document.createElement('div');
+          
           card.classList.add('task-card');
     
           const description = task.description || '';
@@ -32,7 +33,11 @@ document.addEventListener('DOMContentLoaded', async () => {
               <button class="check-button"></button>
             </div>
             <div class="content-task-container">
-              <h3 class="raleway-thin">${task.title}</h3>
+              <div>
+                <h3 class="raleway-thin">${task.title}</h3>
+                <button class="delete-button"><i class="fa-solid fa-trash"></i></button>
+              </div>
+              
               <p class="raleway-thin">${description}</p>
               <div class="info-task-container">
                 <div class="project-container raleway-thin">
@@ -42,6 +47,14 @@ document.addEventListener('DOMContentLoaded', async () => {
               </div>
             </div>
           `;
+
+          const deleteBtn = card.querySelector('.delete-button')
+          deleteBtn.addEventListener('click', async () => {
+            await deleteTask(task.id)
+
+            renderTasks()
+          } )
+
     
           const buttonCheck = card.querySelector('.check-button');
           buttonCheck.addEventListener('click', async () => {
