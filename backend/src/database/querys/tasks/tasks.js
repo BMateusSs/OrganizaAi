@@ -32,7 +32,7 @@ export async function createTask(task_info){
 
 export async function readTask(user_id){
     const query = `
-        SELECT t.id, t.column_id, t.description, t.title, p.id, p.name, p.color, c.code
+        SELECT t.id AS task_id, t.column_id, t.description, t.title, p.id AS proj_id, p.name, p.color, c.code
         FROM tasks t
         LEFT JOIN projects p
         ON t.project_id = p.id
@@ -110,9 +110,13 @@ export async function updateTask(user_id, task_id, updates) {
 
 export async function completedTasks(userId){
     const query = `
-        SELECT * 
-        FROM tasks
-        WHERE user_id = ? AND completed = 1
+        SELECT t.id, t.column_id, t.description, t.title, p.id, p.name, p.color, c.code, t.completed_at
+        FROM tasks t
+        LEFT JOIN projects p
+        ON t.project_id = p.id
+        LEFT JOIN colors c 
+        ON p.color = c.color
+        WHERE t.user_id = ? AND t.completed = 1
         ORDER BY completed_at DESC;
     `
 
@@ -120,6 +124,16 @@ export async function completedTasks(userId){
     
     const intervals = await createIntervals(rows)
     return intervals
+}
+
+export async function deleteTask(userId, taskId) {
+    const query = `
+        DELETE FROM tasks
+        WHERE id = ?;
+    `
+    const [result] = await db.execute(query, [taskId])
+
+    return result.affectedRows
 }
 
 async function createIntervals(rows) {
