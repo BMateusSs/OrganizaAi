@@ -178,6 +178,16 @@ async function showProjectKanban(content, id, name, layout, color, code) {
     const checkBtn = cardTask.querySelector('.check-button')
     checkBtn.style.backgroundColor = 'transparent'
 
+     
+          checkBtn.addEventListener('click', async () => {
+            checkBtn.classList.toggle('checked');
+            const taskId = task.id
+            await updateTaskStatus(taskId)
+    
+            await showProjectKanban(content, id, name, layout, color, code)
+        
+          });
+
     // Adicionar duplo clique para editar
     cardTask.addEventListener('dblclick', () => {
       const targetColumn = document.getElementById(task.column_id);
