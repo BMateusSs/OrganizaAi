@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createTask, readTask, checkCompleted, readProjectTasks, updateTask } from '../database/querys/tasks/tasks.js';
+import { createTask, readTask, checkCompleted, readProjectTasks, updateTask, completedTasks } from '../database/querys/tasks/tasks.js';
 import { validateToken } from '../utils/auth.js';
 
 const tasksRouter = Router(); 
@@ -82,6 +82,18 @@ tasksRouter.put('/update_task', validateToken, async (req, res) => {
     } catch(error) {
         console.error("Erro ao atualizar tarefa:", error)
         res.status(500).json({message: 'Erro ao atualizar tarefa'})
+    }
+})
+
+tasksRouter.get('/completed_tasks', validateToken, async (req, res) => {
+    try{
+        const userId = req.userId;
+        const tasks = await completedTasks(userId)
+
+        return res.status(200).json(tasks)
+        
+    }catch(error){
+        return res.status(500).json({message: "Erro ao buscar tarefas completadas"})
     }
 })
 
