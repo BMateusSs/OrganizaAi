@@ -145,5 +145,3 @@ async function createIntervals(rows) {
     return intervals
 
 }
-
-completedTasks(8)
