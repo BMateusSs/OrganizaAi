@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, readProject, allProjects, projectColumns } from '../database/querys/projects/projects.js'
+import { createProject, readProject, allProjects, projectColumns, deleteProject } from '../database/querys/projects/projects.js'
 import { validateToken } from '../utils/auth.js'
 
 const projectRouter = Router()
@@ -58,6 +58,21 @@ projectRouter.post('/project_columns', validateToken, async (req, res) => {
         
     }catch(error){
         return res.status(500).json({message: "Erro ao buscar colunas"})
+    }
+})
+
+projectRouter.post('/delete_project', validateToken, async (req, res) => {
+
+    try {
+        const userId = req.userId
+        const projId = req.body.projId
+
+        const affectedRows = await deleteProject(projId)
+
+        return res.status(200).json({message: 'Projeto deletado com sucesso', rows: affectedRows})
+        
+    }catch(error){
+        return res.status(500).json({message: "Erro ao deletar projeto"})
     }
 })
 
