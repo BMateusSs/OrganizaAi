@@ -57,3 +57,13 @@ export async function projectColumns(userId, projId) {
     const [rows, fields] = await db.execute(query, [projId])
     return rows
 }
+
+export async function deleteProject(projId) {
+    const query = `
+        DELETE FROM projects
+        WHERE id = ?;
+    `
+
+    const [result] = await db.execute(query, [projId])
+    return result.affectedRows
+}
