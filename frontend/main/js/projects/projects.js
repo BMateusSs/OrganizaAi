@@ -1,5 +1,5 @@
 import { projectFormModal } from "../../../utils/projectFormModal.js"
-import { readProject, projectColumns } from "../../../utils/fetchProjects.js"
+import { readProject, projectColumns, deleteProject } from "../../../utils/fetchProjects.js"
 import { formatDate } from "../../../utils/formatDates.js"
 import { createTask, readProjectTasks, updateTaskStatus, updateTask } from "../../../utils/createTasks.js"
 import { taskFormModal } from "../../../utils/taskFormModal.js"
@@ -26,12 +26,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.innerHTML=`
             
                 <div class="header-project ">
+                  <button class="delete-button"><i class="fa-solid fa-trash"></i></button>
                 </div>
                 <div class="infos-project">
                     <span class="raleway-regular">${project.name}</span>
                     <div class="raleway-thin date-container">${createdDate}</div>
                 </div>
             `
+
+            const deleteBtn = card.querySelector('.delete-button')
+            deleteBtn.addEventListener('click', async (event) => {
+              event.stopPropagation()
+              await deleteProject(project.id)
+              renderProjects()
+            })
+
             projectList.appendChild(card)
             const colorHeader = card.querySelector('.header-project')
             colorHeader.style.backgroundColor = project.code

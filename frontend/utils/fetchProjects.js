@@ -68,3 +68,21 @@ export async function projectColumns(projId){
 
     return data
 }
+
+export async function deleteProject(projId){
+    const body = {
+        projId: projId
+    }
+
+    const config = methodPost(body)
+
+    const url = 'http://localhost:3000/projects/delete_project'
+
+    const {data, error} = await useFetch(url, config)
+
+    if (error){
+        alert(error)
+    }
+
+    return data
+}
